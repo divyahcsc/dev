@@ -1,0 +1,120 @@
+#%RAML 1.0
+title: Simple Member Trigger API
+description: This is a simple API
+version: 1.0.0
+(oas-info):
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+annotationTypes:
+  oas-info:
+    properties:
+      termsOfService?: string
+      contact?:
+        properties:
+          name?: string
+          url?: string
+          email?: string
+      license?:
+        properties:
+          name?: string
+          url?: string
+    allowedTargets: API
+  oas-format:
+    type: string
+    allowedTargets: TypeDeclaration
+  oas-body-name:
+    type: string
+    allowedTargets: TypeDeclaration
+  oas-summary:
+    type: string
+    allowedTargets: Method
+protocols:
+  - HTTPS
+  - HTTP
+baseUri: 'https://virtserver.swaggerhub.com/NITK/EventTest/1.0.0'
+types:
+  MemberDetail:
+    type: object
+    properties:
+      payerCode:
+        example: '00007'
+        type: string
+        (oas-format): uuid
+      payerName:
+        example: Midcare
+        type: string
+        required: false
+      provider:
+        type: object
+        properties:
+          firstName:
+            example: HSCS
+            type: string
+          middleName:
+            example: ACE
+            type: string
+          lastName:
+            example: testName
+            type: string
+          npi:
+            example: '142700147'
+            type: string
+        required: false
+      subscriber:
+        type: object
+        properties:
+          firstName:
+            example: HSCS
+            type: string
+          dob:
+            example: 01/01/1950
+            type: string
+          lastName:
+            example: testName
+            type: string
+          memberID:
+            example: '1427006147'
+            type: string
+        required: false
+      dependent:
+        type: string
+        required: false
+      isSubscriberPatient:
+        type: string
+        required: false
+      doS_StartDate:
+        example: 01/24/2017
+        type: string
+        required: false
+      doS_EndDate:
+        example: 01/24/2017
+        type: string
+        required: false
+      serviceCodes:
+        example: '30'
+        type: string
+        required: false
+      requestSource:
+        example: RestAPI
+        type: string
+        required: false
+/mem:
+  post:
+    description: Adds an member details to the system
+    responses:
+      '201':
+        description: member detail added into system and added to file
+      '400':
+        description: 'invalid input, member ID invalid'
+      '409':
+        description: an existing member already exists
+    body:
+      application/json:
+        description: Inventory item to add
+        type: MemberDetail
+        required: false
+        (oas-body-name): MemberDetail
+    (oas-summary): adds a members details
